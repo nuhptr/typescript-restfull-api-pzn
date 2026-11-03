@@ -1,0 +1,129 @@
+# RUN THE SERVER FIRST
+# USER TEST API
+### REGISTER USER
+POST http://localhost:3000/api/users
+Content-Type: application/json
+Accept: application/json
+
+{
+    "username" : "eko",
+    "password" : "eko123",
+    "name" : "Eko"
+}
+
+### LOGIN USER
+POST http://localhost:3000/api/users/login
+Content-Type: application/json
+Accept: application/json
+
+{
+    "username" : "eko",
+    "password" : "rahasia"
+}
+
+### GET USER (if user logout, login again and change token)
+GET http://localhost:3000/api/users/current
+Accept: application/json
+X-API-TOKEN: c0a3b9ab-e343-49d4-a02e-b84a75796860
+
+### LOGOUT USER (change token if user logout)
+DELETE  http://localhost:3000/api/users/current
+Accept: application/json
+X-API-TOKEN: c0a3b9ab-e343-49d4-a02e-b84a75796860
+
+### UPDATE USER NAME (change token if user update)
+PATCH http://localhost:3000/api/users/current
+Accept: application/json
+Content-Type: application/json
+X-API-TOKEN: c0a3b9ab-e343-49d4-a02e-b84a75796860
+
+{
+    "name" : "Adi Nugraha Putra"
+}
+
+### UPDATE USER PASSWORD (change token if user update)
+PATCH http://localhost:3000/api/users/current
+Accept: application/json
+Content-Type: application/json
+X-API-TOKEN: c0a3b9ab-e343-49d4-a02e-b84a75796860
+
+{
+    "password" : "rahasia"
+}
+
+# CONTACT API
+### CREATE CONTACT (change token if user update)
+POST http://localhost:3000/api/contacts
+Accept: application/json
+Content-Type: application/json
+X-API-TOKEN: c0a3b9ab-e343-49d4-a02e-b84a75796860
+
+{
+    "first_name" : "Budi",
+    "last_name" : "Nugraha",
+    "email" : "adi@example.com",
+    "phone" : "099123123213"
+}
+
+### UPDATE CONTACT (change token if user update)
+PUT http://localhost:3000/api/contacts/474
+Accept: application/json
+Content-Type: application/json
+X-API-TOKEN: c0a3b9ab-e343-49d4-a02e-b84a75796860
+
+{
+    "first_name" : "Adi Nugraha",
+    "last_name" : "Putra",
+    "email" : "adi@example.com",
+    "phone" : "099123123213"
+}
+
+### GET CONTACT (change token if user update)
+GET http://localhost:3000/api/contacts/474
+Accept: application/json
+X-API-TOKEN: c0a3b9ab-e343-49d4-a02e-b84a75796860
+
+### DELETE CONTACT (change token if user update)
+DELETE http://localhost:3000/api/contacts/474
+Accept: application/json
+X-API-TOKEN: c0a3b9ab-e343-49d4-a02e-b84a75796860
+
+### REMOVE CONTACT (change token if user update)
+DELETE http://localhost:3000/api/contacts/474
+Accept: application/json
+X-API-TOKEN: c0a3b9ab-e343-49d4-a02e-b84a75796860
+
+### SEARCH CONTACT
+GET http://localhost:3000/api/contacts?name=budi
+Accept: application/json
+X-API-TOKEN: c0a3b9ab-e343-49d4-a02e-b84a75796860
+
+# ADDRESS API
+### CREATE ADDRESS (change token if user update)
+POST http://localhost:3000/api/contacts/474/addresses
+Accept: application/json
+Content-Type: application/json
+X-API-TOKEN: c0a3b9ab-e343-49d4-a02e-b84a75796860
+
+{
+    "street" : "Jl. Kebon raya No. 1",
+    "city" : "Jakarta",
+    "country" : "Indonesia", 
+    "province" : "DKI Jakarta",
+    "postal_code" : "12345"
+}
+
+### GET ADDRESS (change token if user update)
+GET http://localhost:3000/api/contacts/474/addresses/146
+Accept: application/json
+X-API-TOKEN: c0a3b9ab-e343-49d4-a02e-b84a75796860
+
+### LIST ADDRESS (change token if user update)
+GET http://localhost:3000/api/contacts/474/addresses
+Accept: application/json
+X-API-TOKEN: c0a3b9ab-e343-49d4-a02e-b84a75796860
+
+### REMOVE ADDRESS (change token if user update)
+DELETE http://localhost:3000/api/contacts/474/addresses/146
+Accept: application/json
+X-API-TOKEN: c0a3b9ab-e343-49d4-a02e-b84a75796860
