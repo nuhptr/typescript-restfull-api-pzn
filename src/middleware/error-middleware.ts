@@ -3,11 +3,17 @@ import { ZodError } from "zod"
 
 import { ResponseError } from "../error/response-error"
 
+/**
+ * Centralized Express error handler for the application.
+ *
+ * It maps different error types to consistent HTTP responses so clients receive
+ * meaningful validation problems, domain errors, or internal server failures.
+ */
 export const errorMiddleware = async (
     error: Error,
     req: Request,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
 ) => {
     if (error instanceof ZodError) {
         res.status(400).json({
