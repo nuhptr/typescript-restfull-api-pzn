@@ -1,62 +1,91 @@
 import { NextFunction, Response } from "express"
 
-import { UserRequest } from "../type/user-request"
-import { ContactService } from "../services/contact-service"
+import { UserRequest } from "@/src/type/user-request"
+import { ContactService } from "@/src/services/contact-service"
 import {
     CreateContactRequest,
     SearchContactRequest,
     UpdateContactRequest,
-} from "../model/contact-model"
-import { logger } from "../application/logging"
+} from "@/src/model/contact-model"
+import { logger } from "@/src/application/logging"
 
+/**
+ * Handles all contact-related HTTP operations.
+ *
+ * This controller receives Express requests, maps route parameters and query
+ * data into typed request objects, calls the contact service layer, and
+ * responds with JSON responses while logging the result for debugging.
+ */
 export class ContactController {
+    /**
+     * Creates a new contact for the authenticated user.
+     */
     static async create(req: UserRequest, res: Response, next: NextFunction) {
         try {
             const request: CreateContactRequest = req.body as CreateContactRequest
             const response = await ContactService.create(req.user!, request)
+
             logger.debug("response : " + JSON.stringify(response))
+
             res.status(201).json({ data: response })
         } catch (error) {
             next(error)
         }
     }
 
+    /**
+     * Retrieves a specific contact by id.
+     */
     static async get(req: UserRequest, res: Response, next: NextFunction) {
         try {
             const contactId = Number(req.params.contactId)
             const response = await ContactService.get(req.user!, contactId)
+
             logger.debug("response : " + JSON.stringify(response))
+
             res.status(200).json({ data: response })
         } catch (error) {
             next(error)
         }
     }
 
+    /**
+     * Updates a contact using the payload from the request body.
+     */
     static async update(req: UserRequest, res: Response, next: NextFunction) {
         try {
             const request: UpdateContactRequest = req.body as UpdateContactRequest
             request.id = Number(req.params.contactId)
 
             const response = await ContactService.update(req.user!, request)
+
             logger.debug("response : " + JSON.stringify(response))
+
             res.status(200).json({ data: response })
         } catch (error) {
             next(error)
         }
     }
 
+    /**
+     * Deletes a contact by id.
+     */
     static async remove(req: UserRequest, res: Response, next: NextFunction) {
         try {
             const contactId = Number(req.params.contactId)
             const response = await ContactService.remove(req.user!, contactId)
 
             logger.debug("response : " + JSON.stringify(response))
+
             res.status(200).json({ data: "OK" })
         } catch (error) {
             next(error)
         }
     }
 
+    /**
+     * Searches contacts by name, email, phone, and pagination options.
+     */
     static async search(req: UserRequest, res: Response, next: NextFunction) {
         try {
             const request: SearchContactRequest = {
@@ -67,6 +96,7 @@ export class ContactController {
                 size: req.query.size ? Number(req.query.size) : 10,
             }
             const response = await ContactService.search(req.user!, request)
+
             logger.debug("response : " + JSON.stringify(response))
 
             res.status(200).json(response)

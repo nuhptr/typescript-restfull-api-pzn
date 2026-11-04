@@ -108,7 +108,7 @@ X-API-TOKEN: c0a3b9ab-e343-49d4-a02e-b84a75796860
 {
     "street" : "Jl. Kebon raya No. 1",
     "city" : "Jakarta",
-    "country" : "Indonesia", 
+    "country" : "Indonesia",
     "province" : "DKI Jakarta",
     "postal_code" : "12345"
 }

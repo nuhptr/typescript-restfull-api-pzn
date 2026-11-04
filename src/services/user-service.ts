@@ -2,52 +2,63 @@ import bcrypt from "bcrypt"
 import { v4 as uuid } from "uuid"
 import { User } from "@prisma/client"
 
-import { prismaClient } from "../application/database"
-import { ResponseError } from "../error/response-error"
+import { prismaClient } from "@/src/application/database"
+import { ResponseError } from "@/src/error/response-error"
 import {
     CreateUserRequest,
     LoginUserRequest,
     UpdateUserRequest,
     UserResponse,
     toUserResponse,
-} from "../model/user-model"
+} from "@/src/model/user-model"
 
-import { UserValidation } from "../validation/user-validation"
-import { Validation } from "../validation/validation"
+import { UserValidation } from "@/src/validation/user-validation"
+import { Validation } from "@/src/validation/validation"
 
+/**
+ * Manages user account actions such as registration, authentication,
+ * profile retrieval, profile updates, and logout for the application.
+ */
 export class UserService {
-    // TODO: REGISTER USER (public api)
+    /**
+     * Registers a new user account.
+     *
+     * @param request User registration payload from the client.
+     * @returns The created user mapped to the public response model.
+     * @throws ResponseError If the username already exists.
+     */
     static async register(request: CreateUserRequest): Promise<UserResponse> {
         const registerRequest = Validation.validate(UserValidation.REGISTER, request)
 
         const totalUserWithSameUsername = await prismaClient.user.count({
-            where: {
-                username: registerRequest.username,
-            },
+            where: { username: registerRequest.username },
         })
 
         if (totalUserWithSameUsername != 0) {
             throw new ResponseError(400, "Username already exist")
         }
 
-        // hash password
+        // Hash the password before storing the account.
         registerRequest.password = await bcrypt.hash(registerRequest.password, 10)
 
-        // create user
         const user = await prismaClient.user.create({ data: registerRequest })
 
         return toUserResponse(user)
     }
 
-    // TODO: LOGIN USER (public api)
+    /**
+     * Authenticates a user by username and password, then rotates the API token.
+     *
+     * @param request Login credentials provided by the client.
+     * @returns The authenticated user with the newly generated token.
+     * @throws ResponseError If the username does not exist or the password is invalid.
+     */
     static async login(request: LoginUserRequest): Promise<UserResponse> {
         const loginRequest = Validation.validate(UserValidation.LOGIN, request)
 
-        // find user by username (unique identifier)
+        // Look up the user by username, which is treated as the unique identifier.
         let user = await prismaClient.user.findUnique({
-            where: {
-                username: loginRequest.username,
-            },
+            where: { username: loginRequest.username },
         })
 
         if (!user) {
@@ -61,25 +72,32 @@ export class UserService {
         }
 
         user = await prismaClient.user.update({
-            where: {
-                username: loginRequest.username,
-            },
-            data: {
-                token: uuid(),
-            },
+            where: { username: loginRequest.username },
+            data: { token: uuid() },
         })
 
         const response = toUserResponse(user)
-        response.token = user.token! // make the response token change to updated token
+        response.token = user.token! // Ensure the response contains the refreshed token.
         return response
     }
 
-    // TODO: GET USER (private api)
+    /**
+     * Returns the authenticated user's public profile information.
+     *
+     * @param user The current logged-in user from middleware or request context.
+     * @returns The user details in response format.
+     */
     static async get(user: User): Promise<UserResponse> {
         return toUserResponse(user)
     }
 
-    // TODO: UPDATE USER (private api)
+    /**
+     * Updates the authenticated user's profile information.
+     *
+     * @param user The current user record from the database.
+     * @param request New profile values submitted by the client.
+     * @returns The updated user profile in response format.
+     */
     static async update(user: User, request: UpdateUserRequest): Promise<UserResponse> {
         const updateRequest = Validation.validate(UserValidation.UPDATE, request)
 
@@ -92,24 +110,23 @@ export class UserService {
         }
 
         const result = await prismaClient.user.update({
-            where: {
-                username: user.username,
-            },
+            where: { username: user.username },
             data: user,
         })
 
         return toUserResponse(result)
     }
 
-    // TODO: LOGOUT USER
+    /**
+     * Logs the user out by clearing the active token.
+     *
+     * @param user The currently authenticated user.
+     * @returns The user profile after token invalidation.
+     */
     static async logout(user: User): Promise<UserResponse> {
         const result = await prismaClient.user.update({
-            where: {
-                username: user.username,
-            },
-            data: {
-                token: null,
-            },
+            where: { username: user.username },
+            data: { token: null },
         })
 
         return toUserResponse(result)

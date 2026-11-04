@@ -1,102 +1,198 @@
-# Typescript Restfull Programmer Zaman Now
+# TypeScript RESTful API Project
 
-## General Dependencies
+A backend project built with TypeScript, Express, Prisma, and Jest for building and testing a REST API with clear architecture, validation, and structured middleware flow.
 
--   [zod](https://zod.dev/) - pnpm add zod (Schema Validation)
--   [winston](https://www.npmjs.com/package/winston) - pnpm add winston (Logger)
--   [uuid](https://www.npmjs.com/package/uuid) - pnpm add uuid (Unique ID) : `not longer used`
--   [@types/uuid](https://www.npmjs.com/package/@types/uuid) - pnpm add @types/uuid (Unique ID) : `not longer used`
--   [helmet](https://www.npmjs.com/package/helmet) - pnpm add helmet (Security)
+## Overview
 
--   [typescript](https://www.typescriptlang.org/) - pnpm add typescript (Typescript)
-    -- npx tsc --init
-    -- ubah "module" menjadi "commonjs"
-    -- ubah "types": ["jest"] / library test lainnya
-    -- ubah "outDir" menjadi "./dist"
-    -- ubah "moduleResolution" menjadi "node"
-    -- tambahkan `"include": ["src/**/*", "test/**/*"],` dipaling atas
-    -- `"baseUrl": "./src"`
-    -- `"paths": { "@/*": ["*"] }`
+This project demonstrates a practical backend setup using:
 
-## Testing Dependencies
+- TypeScript for static type safety
+- Express for HTTP routing and middleware
+- Prisma as the ORM layer for database access
+- Zod for schema validation
+- Winston for application logging
+- Jest + Supertest for API testing
 
--   [jest](https://jestjs.io/) - pnpm add jest (Testing)
--   [@types/jest](https://www.npmjs.com/package/@types/jest) - pnpm add @types/jest (Testing)
--   [babel-jest](https://www.npmjs.com/package/babel-jest) - pnpm add babel-jest (Testing)
--   [@babel/preset-env](https://www.npmjs.com/package/@babel/preset-env) - pnpm add @babel/preset-env (Testing)
--   [@babel/preset-typescript](https://www.npmjs.com/package/@babel/preset-typescript) - pnpm add @babel/preset-typescript (make babel understand typescript)
--   [@jest/globals](https://www.npmjs.com/package/@jest/globals) - pnpm add @jest/globals (make jest globaly available)
--   [supertest](https://www.npmjs.com/package/supertest) - pnpm add supertest (Support Testing)
--   [@types/supertest](https://www.npmjs.com/package/@types/supertest) - pnpm add @types/supertest (Support Testing)
+## Project Dependencies
 
-Then add script :
+### General Dependencies
+
+- [zod](https://zod.dev/) - schema validation
+- [winston](https://www.npmjs.com/package/winston) - structured logging
+- [uuid](https://www.npmjs.com/package/uuid) - unique ID generation (`currently not actively used`)
+- [@types/uuid](https://www.npmjs.com/package/@types/uuid) - TypeScript types for UUID (`currently not actively used`)
+- [helmet](https://www.npmjs.com/package/helmet) - HTTP security headers
+- [typescript](https://www.typescriptlang.org/) - TypeScript compiler and type system
+
+### Testing Dependencies
+
+- [jest](https://jestjs.io/) - testing framework
+- [@types/jest](https://www.npmjs.com/package/@types/jest) - TypeScript support for Jest
+- [babel-jest](https://www.npmjs.com/package/babel-jest) - Babel integration for Jest
+- [@babel/preset-env](https://www.npmjs.com/package/@babel/preset-env) - JavaScript environment preset
+- [@babel/preset-typescript](https://www.npmjs.com/package/@babel/preset-typescript) - TypeScript support for Babel
+- [@jest/globals](https://www.npmjs.com/package/@jest/globals) - global test utilities
+- [supertest](https://www.npmjs.com/package/supertest) - HTTP testing library
+- [@types/supertest](https://www.npmjs.com/package/@types/supertest) - TypeScript support for Supertest
+
+### Framework and ORM Dependencies
+
+- [express](https://expressjs.com/) - web framework
+- [@types/express](https://www.npmjs.com/package/@types/express) - TypeScript types for Express
+- [prisma](https://www.prisma.io/) - Prisma CLI and schema tooling
+- [@prisma/client](https://www.npmjs.com/package/@prisma/client) - generated Prisma client
+
+### Security Dependencies
+
+- [bcrypt](https://www.npmjs.com/package/bcrypt) - password hashing
+- [@types/bcrypt](https://www.npmjs.com/package/@types/bcrypt) - TypeScript support for bcrypt
+
+## TypeScript Configuration
+
+Initialize TypeScript:
+
+```bash
+npx tsc --init
+```
+
+Recommended configuration:
 
 ```json
 {
-    "scripts": {
-        "test": "jest --runInBand", // --runInBand for run test in sequence not parallel
-        "test:user": "jest user.test.ts",
-        "test:contact": "jest contact.test.ts"
-    },
-    "jest": {
-        "transform": {
-            "^.+\\.[t|j]sx?$": "babel-jest"
-        },
-        "moduleDirectories": ["node_modules", "src"],
-        "moduleNameMapper": {
-            "@/(.*)": "<rootDir>/src/$1"
-        }
-    }
+   "include": ["src/**/*", "test/**/*"],
+   "compilerOptions": {
+      "target": "es2016",
+      "module": "commonjs",
+      "moduleResolution": "node",
+      "baseUrl": "./src",
+      "paths": {
+         "@/*": ["*"]
+      },
+      "types": ["jest"],
+      "outDir": "./dist",
+      "esModuleInterop": true,
+      "forceConsistentCasingInFileNames": true,
+      "strict": true,
+      "skipLibCheck": true
+   }
 }
 ```
 
-also script :
+## Test Configuration
+
+Add the following to `package.json`:
 
 ```json
 {
-    "presets": ["@babel/preset-env", "@babel/preset-typescript"]
+   "scripts": {
+      "test": "jest --runInBand",
+      "test:user": "jest user.test.ts",
+      "test:contact": "jest contact.test.ts",
+      "test:address": "jest address.test.ts"
+   },
+   "jest": {
+      "transform": {
+         "^.+\\.[t|j]sx?$": "babel-jest"
+      },
+      "moduleDirectories": ["node_modules", "src"],
+      "moduleNameMapper": {
+         "@/(.*)": "<rootDir>/src/$1"
+      }
+   }
 }
 ```
 
-## Distribution File
+Add Babel config:
 
-For compile entrie typescript project to javascript. Then we can see `./dist` folder appear
-
-```bash
-    npx tsc
-    OR add in package json "build": "npx tsc"
+```json
+{
+   "presets": ["@babel/preset-env", "@babel/preset-typescript"]
+}
 ```
 
-Then you can run the project with :
+## Build and Run
+
+Compile the project:
 
 ```bash
-    node "./dist/src/main.js"
-    OR add in package json "start": "node ./dist/src/main.js"
+npx tsc
 ```
 
-## Express Framework
+Or add this script to `package.json`:
 
--   [express](https://expressjs.com/) - pnpm add express
--   [@types/express](https://www.npmjs.com/package/@types/express) - pnpm add @types/express
+```json
+{
+   "scripts": {
+      "build": "npx tsc"
+   }
+}
+```
 
-## Database ORM
+Then run the application:
 
--   [prisma](https://www.prisma.io/) - pnpm add prisma
--   [@prisma/client](https://www.npmjs.com/package/@prisma/client) - pnpm add @prisma/client (auto generated client for prisma)
--   npx prisma init
--   Schema User, Contact, Address
+```bash
+node ./dist/src/main.js
+```
 
-    ```json
-    {
-        "scripts": {
-            "prisma:generate": "npx prisma generate",
-            "prisma:migrate": "npx prisma migrate dev",
-            "prisma:studio": "npx prisma studio"
-        }
-    }
-    ```
+Or add:
+
+```json
+{
+   "scripts": {
+      "start": "node ./dist/src/main.js"
+   }
+}
+```
+
+## Express Setup
+
+Install:
+
+```bash
+npm install express @types/express
+```
+
+This project uses Express with:
+
+- JSON request parsing
+- security headers via Helmet
+- route registration for public and private APIs
+- a centralized error middleware
+
+## Prisma Setup
+
+Initialize Prisma:
+
+```bash
+npx prisma init
+```
+
+Define models such as User, Contact, and Address.
+
+Add Prisma scripts:
+
+```json
+{
+   "scripts": {
+      "prisma:generate": "npx prisma generate",
+      "prisma:migrate": "npx prisma migrate dev",
+      "prisma:studio": "npx prisma studio"
+   }
+}
+```
 
 ## Password Security
 
--   [bcrypt](https://www.npmjs.com/package/bcrypt) - pnpm add bcrypt
--   [@types/bcrypt](https://www.npmjs.com/package/@types/bcrypt) - pnpm add @types/bcrypt
+Install:
+
+```bash
+npm install bcrypt @types/bcrypt
+```
+
+This project uses `bcrypt` for secure password hashing and token-based access control for authenticated routes.
+
+## Notes
+
+- `uuid` is included in the dependency list, but it is no longer actively used in the current project implementation.
+- This project follows a clean layered architecture: controller, service, model, validation, middleware, and route separation.
+- `--runInBand` is used in the test script so Jest runs tests sequentially rather than in parallel.
