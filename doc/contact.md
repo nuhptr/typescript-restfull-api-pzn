@@ -11,7 +11,7 @@ Endpoint: `POST` /api/contacts
 
 Request Header:
 
--   X-API-TOKEN: token(uuid)
+- X-API-TOKEN: token(uuid)
 
 Request Body:
 
@@ -52,7 +52,7 @@ Endpoint: `GET` /api/contacts/:id
 
 Request Header:
 
--   X-API-TOKEN: token(uuid)
+- X-API-TOKEN: token(uuid)
 
 Response Body (Success):
 
@@ -82,7 +82,7 @@ Endpoint: `PUT` /api/contacts/:id
 
 Request Header:
 
--   X-API-TOKEN: token(uuid)
+- X-API-TOKEN: token(uuid)
 
 Request Body:
 
@@ -122,7 +122,7 @@ Endpoint: `DELETE` /api/contacts/:id
 
 Request Header:
 
--   X-API-TOKEN: token(uuid)
+- X-API-TOKEN: token(uuid)
 
 Response Body (Success):
 
@@ -146,15 +146,15 @@ Endpoint: `GET` /api/contacts
 
 Query Parameter:
 
--   name: string, contact first name or contact last name, optional
--   phone: string, contact phone, optional
--   email: string, contact email, optional
--   page: number, default 1
--   size: number, default 10
+- name: string, contact first name or contact last name, optional
+- phone: string, contact phone, optional
+- email: string, contact email, optional
+- page: number, default 1
+- size: number, default 10
 
 Request Header:
 
--   X-API-TOKEN: token(uuid)
+- X-API-TOKEN: token(uuid)
 
 Response Body (Success):
 

@@ -11,7 +11,7 @@ Endpoint: `POST` /api/contacts/:idContact/addresses
 
 Request Header:
 
--   X-API-TOKEN: token(uuid)
+- X-API-TOKEN: token(uuid)
 
 Request Body:
 
@@ -54,7 +54,7 @@ Endpoint: `GET` /api/contacts/:idContact/addresses/:idAddress
 
 Request Header:
 
--   X-API-TOKEN: token(uuid)
+- X-API-TOKEN: token(uuid)
 
 Response Body (success):
 
@@ -85,7 +85,7 @@ Endpoint: `PUT` /api/contacts/:idContact/addresses/:idAddress
 
 Request Header:
 
--   X-API-TOKEN: token(uuid)
+- X-API-TOKEN: token(uuid)
 
 Request Body:
 
@@ -128,7 +128,7 @@ Endpoint: `DELETE` /api/contacts/:idContact/addresses/:idAddress
 
 Request Header:
 
--   X-API-TOKEN: token(uuid)
+- X-API-TOKEN: token(uuid)
 
 Response Body (success):
 
