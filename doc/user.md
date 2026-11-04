@@ -77,7 +77,7 @@ Endpoint: `GET` /api/users/current
 
 Request Header:
 
--   X-API-TOKEN: token(uuid)
+- X-API-TOKEN: token(uuid)
 
 Response Body (Success):
 
@@ -104,7 +104,7 @@ Endpoint: `PATCH` /api/users/current -> patch is partial update (tidak wajib)
 
 Request Header:
 
--   X-API-TOKEN: token(uuid)
+- X-API-TOKEN: token(uuid)
 
 Request Body:
 
@@ -140,7 +140,7 @@ Endpoint: `DELETE` /api/users/current
 
 Request Header:
 
--   X-API-TOKEN: token(uuid)
+- X-API-TOKEN: token(uuid)
 
 Response Body (Success):
 
